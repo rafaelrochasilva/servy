@@ -13,12 +13,8 @@ defmodule Servy.Handler do
     %{ method: method, path: path, resp_body: body }
   end
 
-  def route(%{ method: method, path: path, resp_body: _ }) do
-    %{
-      method: method,
-      path: path,
-      resp_body: "Bears, Lions, Tigers"
-    }
+  def route(conv) do
+    %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
   def format_response(%{ method: _, path: _, resp_body: resp_body }) do
