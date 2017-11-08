@@ -1,12 +1,14 @@
 defmodule Servy.Handler do
+
   def handle(request) do
     request
     |> parse
-    format_response(request)
+    |> route
+    |> format_response
   end
 
   def parse(request) do
-    lines_request = request_by_line(request )
+    lines_request = request_by_line(request)
     header_request = header(lines_request)
 
     %{
@@ -16,35 +18,43 @@ defmodule Servy.Handler do
     }
   end
 
-  def format_response(conv) do
+  def route(%{ method: method, path: path, resp_body:_ }) do
+    %{
+      method: method,
+      path: path,
+      resp_body: "Bears, Lions, Tigers"
+    }
+  end
+
+  def format_response(%{ method: method, path: path, resp_body: resp_body }) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 20
+    Content-Length: #{String.length(resp_body)}
 
-    Bears, Lions, Tigers
+    #{resp_body}
     """
   end
 
-  def request_by_line(request) do
+  defp request_by_line(request) do
     String.split(request, "\n")
   end
 
-  def header(request) do
+  defp header(request) do
     request
     |> List.first
     |> String.split
   end
 
-  def header_method(header) do
+  defp header_method(header) do
     Enum.at(header, 0)
   end
 
-  def header_path(header) do
+  defp header_path(header) do
     Enum.at(header, 1)
   end
 
-  def body(request) do
+  defp body(request) do
     List.last(request)
   end
 end
