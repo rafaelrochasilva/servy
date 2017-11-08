@@ -7,10 +7,13 @@ defmodule Servy.Handler do
   end
 
   def parse(request) do
-    [header, _, _, _, body, _] = String.split(request, "\n")
-    [method, path, _] = header |> String.split
+    [method, path, _] =
+      request
+      |> String.split("\n")
+      |> List.first
+      |> String.split
 
-    %{ method: method, path: path, resp_body: body }
+    %{ method: method, path: path, resp_body: ""}
   end
 
   def route(conv) do
