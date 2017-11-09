@@ -3,7 +3,7 @@ defmodule HandlerTest do
 
   test "handler response" do
     request = """
-    GET /wildthings HTTP/1.1
+    GET /wildzoo HTTP/1.1
     Host: example.com
     User-Agent: ExampleBrowser/1.0
     Accept: */*
