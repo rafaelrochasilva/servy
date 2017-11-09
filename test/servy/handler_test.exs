@@ -34,14 +34,21 @@ defmodule HandlerTest do
   end
 
   test "route the parsed request" do
-    parsed_request = %{method: "GET", path: "wildzoo", resp_body: ""}
-    expected_route =  %{method: "GET", path: "wildzoo", resp_body: "Bears, Lions, Tigers"}
+    parsed_request = %{method: "GET", path: "/wildzoo", resp_body: ""}
+    expected_route =  %{method: "GET", path: "/wildzoo", resp_body: "Bears, Lions, Tigers"}
+
+    assert Servy.Handler.route(parsed_request) == expected_route
+  end
+
+  test "routes to a bear path" do
+    parsed_request = %{method: "GET", path: "/bear", resp_body: ""}
+    expected_route =  %{method: "GET", path: "/bear", resp_body: "Yogi, Panda, Paddington"}
 
     assert Servy.Handler.route(parsed_request) == expected_route
   end
 
   test "formats the response" do
-    route_response =  %{method: "GET", path: "wildzoo", resp_body: "Bears, Lions, Tigers"}
+    route_response =  %{method: "GET", path: "/wildzoo", resp_body: "Bears, Lions, Tigers"}
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html
