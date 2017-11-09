@@ -41,8 +41,8 @@ defmodule HandlerTest do
   end
 
   test "routes to a bear path" do
-    parsed_request = %{method: "GET", path: "/bear", resp_body: ""}
-    expected_route =  %{method: "GET", path: "/bear", resp_body: "Yogi, Panda, Paddington"}
+    parsed_request = %{method: "GET", path: "/bears", resp_body: ""}
+    expected_route =  %{method: "GET", path: "/bears", resp_body: "Yogi, Panda, Paddington"}
 
     assert Servy.Handler.route(parsed_request) == expected_route
   end

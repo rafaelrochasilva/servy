@@ -20,7 +20,7 @@ defmodule Servy.Handler do
     %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
-  def route(%{method: "GET", path: "/bear"} = conv) do
+  def route(%{method: "GET", path: "/bears"} = conv) do
     %{ conv | resp_body: "Yogi, Panda, Paddington" }
   end
 
