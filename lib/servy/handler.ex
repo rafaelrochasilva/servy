@@ -16,20 +16,21 @@ defmodule Servy.Handler do
     %{ method: method, status: nil, path: path, resp_body: ""}
   end
 
-  def route(%{method: "GET", path: "/wildzoo"} = conv) do
-    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
-  end
-
-  def route(%{method: "GET", path: "/bears"} = conv) do
-    %{ conv | status: 200, resp_body: "Yogi, Panda, Paddington" }
-  end
-
-  def route(%{method: "GET", path: "/bears/" <> id} = conv) do
-    %{ conv | status: 200, resp_body: "Bear #{id}" }
+  def route(%{method: "GET", path: "/bears/" <> _id} = conv) do
+    %{ conv | status: 200, resp_body: "Bear 1" }
   end
 
   def route(%{method: "GET", path: path} = conv) do
-    %{ conv | status: 404, resp_body: "No #{path} here!"}
+    case read_file(path) do
+      {:ok, content} ->
+        %{ conv | status: 200, resp_body: content }
+
+      {:error, :enoent} ->
+        %{ conv | status: 404, resp_body: "Page not found!" }
+
+      {:erro, reason} ->
+        %{ conv | status: 500, resp_body: "File error: #{reason}" }
+    end
   end
 
   def route(%{method: "DELETE", path: "/bears/" <> _id} = conv) do
@@ -44,6 +45,12 @@ defmodule Servy.Handler do
 
     #{resp_body}
     """
+  end
+
+  defp read_file(path) do
+    Path.expand("../pages", __DIR__)
+    |> Path.join("#{path}.html")
+    |> File.read
   end
 
   defp status_reason(code) do
