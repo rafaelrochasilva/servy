@@ -1,48 +1,40 @@
 defmodule Servy.Handler do
   @moduledoc "Handles HTTP requests."
 
+  import Servy.Parser
+
   @pages_path Path.expand("../pages", __DIR__)
 
   @doc "Transforms the request into a response."
   def handle(request) do
     request
-    |> parse
+    |> Servy.Parser.parse
     |> route
     |> format_response
   end
 
-  def parse(request) do
-    [method, path, _] =
-      request
-      |> String.split("\n")
-      |> List.first
-      |> String.split
-
-    %{ method: method, status: nil, path: path, resp_body: ""}
-  end
-
   def route(%{method: "GET", path: "/bears/" <> _id} = conv) do
-    %{ conv | status: 200, resp_body: "Bear 1" }
+    %{conv | status: 200, resp_body: "Bear 1"}
   end
 
   def route(%{method: "GET", path: path} = conv) do
     case read_file(path) do
       {:ok, content} ->
-        %{ conv | status: 200, resp_body: content }
+        %{conv | status: 200, resp_body: content}
 
       {:error, :enoent} ->
-        %{ conv | status: 404, resp_body: "Page not found!" }
+        %{conv | status: 404, resp_body: "Page not found!"}
 
       {:erro, reason} ->
-        %{ conv | status: 500, resp_body: "File error: #{reason}" }
+        %{conv | status: 500, resp_body: "File error: #{reason}"}
     end
   end
 
   def route(%{method: "DELETE", path: "/bears/" <> _id} = conv) do
-    %{ conv | status: 403, resp_body: "You can't delete my bears!" }
+    %{conv | status: 403, resp_body: "You can't delete my bears!"}
   end
 
-  def format_response(%{ status: code, resp_body: resp_body }) do
+  def format_response(%{status: code, resp_body: resp_body}) do
     """
     HTTP/1.1 #{code} #{status_reason(code)}
     Content-Type: text/html
