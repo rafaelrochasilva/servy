@@ -41,18 +41,6 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-  test "parse request" do
-    request = """
-    GET /wildzoo HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
-    """
-
-    assert Servy.Handler.parse(request) == %{ method: "GET", status: nil, path: "/wildzoo", resp_body: "" }
-  end
-
   test "route the parsed request" do
     parsed_request = %{method: "GET", status: nil, path: "/wildzoo", resp_body: ""}
     expected_route =  %{method: "GET", status: 200, path: "/wildzoo", resp_body: "Bears, Lions, Tigers\n"}
