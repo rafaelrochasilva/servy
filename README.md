@@ -1,21 +1,22 @@
 # Servy
 
-**TODO: Add description**
+Servy is a app made with elixir following the The Pragmatic Studio Elixir online
+course. It's main objective is to create an Elixir OTP app with concurrence, 
+fault tolerance from scratch.
 
 ## Installation
+- Install Elixir:
+`brew update && brew install elixir`
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `servy` to your list of dependencies in `mix.exs`:
+- Install the dependencies:
+`mix deps.get`
 
-```elixir
-def deps do
-  [
-    {:servy, "~> 0.1.0"}
-  ]
-end
-```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/servy](https://hexdocs.pm/servy).
+## Development workflow
+
+### [Credo](https://github.com/rrrene/credo)
+Credo is a static code analysis tool for the Elixir language with a focus on 
+teaching and code consistency
+
+Run before pushing code
 
