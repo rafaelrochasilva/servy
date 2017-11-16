@@ -2,6 +2,7 @@ defmodule Servy.Handler do
   @moduledoc "Handles HTTP requests."
 
   import Servy.Parser
+  alias Servy.Conv
 
   @pages_path Path.expand("../pages", __DIR__)
 
@@ -13,11 +14,11 @@ defmodule Servy.Handler do
     |> format_response
   end
 
-  def route(%{method: "GET", path: "/bears/" <> _id} = conv) do
+  def route(%Conv{method: "GET", path: "/bears/" <> _id} = conv) do
     %{conv | status: 200, resp_body: "Bear 1"}
   end
 
-  def route(%{method: "GET", path: path} = conv) do
+  def route(%Conv{method: "GET", path: path} = conv) do
     case read_file(path) do
       {:ok, content} ->
         %{conv | status: 200, resp_body: content}
@@ -30,11 +31,11 @@ defmodule Servy.Handler do
     end
   end
 
-  def route(%{method: "DELETE", path: "/bears/" <> _id} = conv) do
+  def route(%Conv{method: "DELETE", path: "/bears/" <> _id} = conv) do
     %{conv | status: 403, resp_body: "You can't delete my bears!"}
   end
 
-  def format_response(%{status: code, resp_body: resp_body}) do
+  def format_response(%Conv{status: code, resp_body: resp_body}) do
     """
     HTTP/1.1 #{code} #{status_reason(code)}
     Content-Type: text/html

@@ -9,7 +9,7 @@ defmodule Servy.ParserTest do
     Accept: */*\n
     """
 
-    expected_parsed_request =  %{
+    expected_parsed_request =  %Servy.Conv{
       method: "GET",
       status: nil,
       path: "/wildzoo",
