@@ -17,7 +17,7 @@ defmodule Servy.Handler do
 
   def format_response(%Conv{status: code, resp_body: resp_body}) do
     """
-    HTTP/1.1 #{code} #{status_reason(code)}
+    HTTP/1.1 #{Conv.status_message(code)}
     Content-Type: text/html
     Content-Length: #{String.length(resp_body)}
 
@@ -63,16 +63,5 @@ defmodule Servy.Handler do
     @pages_path
     |> Path.join("#{path}.html")
     |> File.read
-  end
-
-  defp status_reason(code) do
-    %{
-      200 => "OK",
-      201 => "Created",
-      401 => "Unauthorized",
-      403 => "Forbidden",
-      404 => "Not Found",
-      500 => "Internal Server Error"
-    }[code]
   end
 end
