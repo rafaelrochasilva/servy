@@ -1,7 +1,7 @@
 defmodule HandlerTest do
   use ExUnit.Case
 
-  test "handler response" do
+  test "handler a GET request" do
     request = """
     GET /wildzoo HTTP/1.1
     Host: example.com
@@ -21,7 +21,7 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-  test "handler a unknow path request" do
+  test "handler a unknow GET request" do
     request = """
     GET /tigers HTTP/1.1
     Host: example.com
@@ -36,6 +36,29 @@ defmodule HandlerTest do
     Content-Length: 15
 
     Page not found!
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+  end
+
+  test "handler a POST request" do
+    request = """
+    POST /bears HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+    Content-Length: 21
+
+    name=Baloo&type=Brown
+    """
+
+    expected_response = """
+    HTTP/1.1 201 Created
+    Content-Type: text/html
+    Content-Length: 33
+
+    Created a Brown bear named Baloo!
     """
 
     assert Servy.Handler.handle(request) == expected_response
@@ -65,6 +88,29 @@ defmodule HandlerTest do
   test "routes to a expecific bear path" do
     parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears/1", resp_body: ""}
     expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears/1", resp_body: "Bear 1"}
+
+    assert Servy.Handler.route(parsed_request) == expected_route
+  end
+
+  test "routes a POST action for creating a new bear" do
+    parsed_request = %Servy.Conv{
+      method: "POST",
+      status: nil,
+      path: "/bears",
+      resp_body: "",
+      params: %{
+        "name" => "Baloo",
+        "type" => "Brown"
+      }
+    }
+
+    expected_route = %Servy.Conv{
+      method: "POST",
+      status: 201,
+      path: "/bears",
+      resp_body: "Created a Brown bear named Baloo!",
+      params: %{"name" => "Baloo", "type" => "Brown"}
+    }
 
     assert Servy.Handler.route(parsed_request) == expected_route
   end
