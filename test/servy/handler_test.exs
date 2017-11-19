@@ -33,7 +33,7 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 21
+    Content-Length: 23
 
     Yogi, Panda, Paddington
     """

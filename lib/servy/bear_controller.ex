@@ -2,7 +2,7 @@ defmodule Servy.BearController do
   alias Servy.Conv
 
   def index(conv) do
-    "Yogi, Panda, Paddington"
+    %Conv{ conv | status: 200, resp_body: "Yogi, Panda, Paddington"}
   end
 
   def show(conv, id) do

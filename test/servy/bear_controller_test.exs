@@ -3,7 +3,7 @@ defmodule BearControllerTest do
 
   test "routes to a bear path" do
     parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears", resp_body: ""}
-    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears", resp_body: "Yogi, Panda, Paddington\n"}
+    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears", resp_body: "Yogi, Panda, Paddington"}
 
     assert Servy.BearController.index(parsed_request) == expected_route
   end
