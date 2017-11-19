@@ -1,7 +1,7 @@
 defmodule Servy.ParserTest do
   use ExUnit.Case
 
-  test "parse a GET request" do
+  test "parse a GET request to wildzoo" do
     request = """
     GET /wildzoo HTTP/1.1
     Host: example.com
@@ -24,7 +24,7 @@ defmodule Servy.ParserTest do
     assert Servy.Parser.parse(request) == expected_parsed_request
   end
 
-  test "parse a POST request" do
+  test "parse a POST request to create a bear" do
     request = """
     POST /bears HTTP/1.1
     Host: example.com
