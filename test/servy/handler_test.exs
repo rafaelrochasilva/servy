@@ -1,7 +1,7 @@
 defmodule HandlerTest do
   use ExUnit.Case
 
-  test "handler a GET request" do
+  test "handler a GET request for wildzoo" do
     request = """
     GET /wildzoo HTTP/1.1
     Host: example.com
@@ -16,6 +16,26 @@ defmodule HandlerTest do
     Content-Length: 21
 
     Bears, Lions, Tigers\n
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+  end
+
+  test "handler a GET request for listing all bears" do
+    request = """
+    GET / HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    expected_response = """
+    HTTP/1.1 200 OK
+    Content-Type: text/html
+    Content-Length: 21
+
+    Yogi, Panda, Paddington
     """
 
     assert Servy.Handler.handle(request) == expected_response
@@ -41,7 +61,7 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-  test "handler a POST request" do
+  test "handler a POST request to create a new bear" do
     request = """
     POST /bears HTTP/1.1
     Host: example.com
