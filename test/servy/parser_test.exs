@@ -13,7 +13,12 @@ defmodule Servy.ParserTest do
       method: "GET",
       status: nil,
       path: "/wildzoo",
-      resp_body: ""
+      resp_body: "",
+      headers: %{
+        "Host" => "example.com",
+        "User-Agent" => "ExampleBrowser/1.0",
+        "Accept" => "*/*"
+      }
     }
 
     assert Servy.Parser.parse(request) == expected_parsed_request
@@ -38,6 +43,13 @@ defmodule Servy.ParserTest do
       params: %{
         "name" => "Baloo",
         "type" => "Brown"
+      },
+      headers: %{
+        "Host" => "example.com",
+        "User-Agent" => "ExampleBrowser/1.0",
+        "Accept" => "*/*",
+        "Content-Type" => "application/x-www-form-urlencoded",
+        "Content-Length" => "21"
       }
     }
 

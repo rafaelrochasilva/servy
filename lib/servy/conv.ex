@@ -4,7 +4,8 @@ defmodule Servy.Conv do
     path: "",
     resp_body: "",
     status: nil,
-    params: %{}
+    params: %{},
+    headers: %{}
   ]
 
   def status_code_message do
