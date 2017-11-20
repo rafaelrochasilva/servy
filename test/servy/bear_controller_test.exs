@@ -11,8 +11,9 @@ defmodule BearControllerTest do
   test "routes to a expecific bear path" do
     parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears/1", resp_body: ""}
     expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears/1", resp_body: "Bear 1"}
+    params = Map.put(%{}, "id", 1)
 
-    assert Servy.BearController.show(parsed_request, 1) == expected_route
+    assert Servy.BearController.show(parsed_request, params) == expected_route
   end
 
   test "routes a POST action for creating a new bear" do

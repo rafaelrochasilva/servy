@@ -5,7 +5,7 @@ defmodule Servy.BearController do
     %Conv{ conv | status: 200, resp_body: "Yogi, Panda, Paddington"}
   end
 
-  def show(conv, id) do
+  def show(conv, %{"id" => id}) do
     %Conv{ conv | status: 200, resp_body: "Bear #{id}"}
   end
 
