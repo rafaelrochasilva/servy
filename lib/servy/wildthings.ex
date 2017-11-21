@@ -1,4 +1,8 @@
 defmodule Servy.Wildthings do
+  @moduledoc """
+  Wildthings is an interface responsable to fetch all related animals. By this 
+  we can access the list of bears, or find a expecific bear.
+  """
 
   alias Servy.Bear
 
@@ -18,11 +22,11 @@ defmodule Servy.Wildthings do
   end
 
   def find_bear(id) when is_integer(id) do
-    Enum.find(list_bears, fn(bear) -> bear.id == id end)
+    Enum.find(list_bears(), fn(bear) -> bear.id == id end)
   end
 
   def find_bear(id) when is_binary(id) do
     id = String.to_integer(id)
-    Enum.find(list_bears, fn(bear) -> bear.id == id end)
+    Enum.find(list_bears(), fn(bear) -> bear.id == id end)
   end
 end

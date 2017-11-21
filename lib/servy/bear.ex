@@ -1,4 +1,9 @@
 defmodule Servy.Bear do
+  @moduledoc """
+  The Bear module is a data abstraction for a bear. By this we can define some
+  properties that will be used for each entity of bear.
+  """
+
   defstruct [id: nil, name: "", type: "", hibernating: false]
 
   def is_grizzly(bear) do

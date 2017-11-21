@@ -1,7 +1,6 @@
 defmodule Servy.Handler do
   @moduledoc "Handles HTTP requests."
 
-  import Servy.Parser
   alias Servy.Conv
   alias Servy.BearController
 
@@ -43,20 +42,21 @@ defmodule Servy.Handler do
   end
 
   defp route(%Conv{method: "GET", path: path} = conv) do
-    read_file(path)
+    path
+    |> read_file
     |> handle_file(conv)
   end
 
   defp handle_file({:ok, content}, conv) do
-    %{ conv | status: 200, resp_body: content }
+    %{conv | status: 200, resp_body: content}
   end
 
   defp handle_file({:error, :enoent}, conv) do
-    %{ conv | status: 404, resp_body: "Page not found!" }
+    %{conv | status: 404, resp_body: "Page not found!"}
   end
 
   defp handle_file({:error, reason}, conv) do
-    %{ conv | status: 500, resp_body: "File error: #{reason}" }
+    %{conv | status: 500, resp_body: "File error: #{reason}"}
   end
 
   defp read_file(path) do

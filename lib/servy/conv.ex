@@ -1,4 +1,8 @@
 defmodule Servy.Conv do
+  @moduledoc """
+  Conv is a data abstraction for deling with http requests and responses.
+  """
+
   defstruct [
     method: "",
     path: "",

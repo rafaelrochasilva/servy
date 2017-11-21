@@ -33,6 +33,6 @@ defmodule Servy.BearController do
       |> Path.join(template)
       |> EEx.eval_file(bindings)
 
-    %Conv{ conv | status: 200, resp_body: content}
+    %Conv{conv | status: 200, resp_body: content}
   end
 end
