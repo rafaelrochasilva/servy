@@ -1,17 +1,26 @@
 defmodule BearControllerTest do
   use ExUnit.Case
 
-  test "routes to a bear path" do
+  test "lists all bears" do
+    ul_items = "<ul><li>Brutus - Grizzly</li><li>Kenai - Grizzly</li><li>Scarface - Grizzly</li></ul>"
     parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears", resp_body: ""}
-    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears", resp_body: "Yogi, Panda, Paddington"}
+    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears", resp_body: ul_items}
 
     assert Servy.BearController.index(parsed_request) == expected_route
   end
 
   test "routes to a expecific bear path" do
     parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears/1", resp_body: ""}
-    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears/1", resp_body: "Bear 1"}
+    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears/1", resp_body: "<h1>Teddy 1: Brown</h1>"}
     params = Map.put(%{}, "id", 1)
+
+    assert Servy.BearController.show(parsed_request, params) == expected_route
+  end
+
+  test "routes to a expecific bear path passing a string id" do
+    parsed_request = %Servy.Conv{method: "GET", status: nil, path: "/bears/1", resp_body: ""}
+    expected_route = %Servy.Conv{method: "GET", status: 200, path: "/bears/1", resp_body: "<h1>Teddy 1: Brown</h1>"}
+    params = Map.put(%{}, "id", "1")
 
     assert Servy.BearController.show(parsed_request, params) == expected_route
   end
