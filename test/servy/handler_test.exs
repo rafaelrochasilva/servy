@@ -33,9 +33,9 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 85
+    Content-Length: 331
 
-    <ul><li>Brutus - Grizzly</li><li>Kenai - Grizzly</li><li>Scarface - Grizzly</li></ul>
+    <ul>\n  \n    <li>Brutus - Grizzly</li>\n  \n    <li>Iceman - Polar</li>\n  \n    <li>Kenai - Grizzly</li>\n  \n    <li>Paddington - Brown</li>\n  \n    <li>Roscoe - Panda</li>\n  \n    <li>Rosie - Black</li>\n  \n    <li>Scarface - Grizzly</li>\n  \n    <li>Smokey - Black</li>\n  \n    <li>Snow - Polar</li>\n  \n    <li>Teddy - Brown</li>\n  \n</ul>\n
     """
 
     assert Servy.Handler.handle(request) == expected_response

@@ -1,0 +1,1 @@
+<h1><%=bear.name%> <%=bear.id%>: <%=bear.type%></h1>
