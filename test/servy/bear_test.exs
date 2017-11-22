@@ -1,5 +1,5 @@
 defmodule Servy.BearTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test 'sort a given names asc' do
     name1 = %{name: "Yogi"}

@@ -1,5 +1,5 @@
 defmodule HandlerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "handler a GET request for wildzoo" do
     request = """

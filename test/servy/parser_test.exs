@@ -1,5 +1,5 @@
 defmodule Servy.ParserTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "parse a GET request to wildzoo" do
     request = """

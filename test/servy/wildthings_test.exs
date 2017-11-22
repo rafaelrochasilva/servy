@@ -1,5 +1,5 @@
 defmodule Servy.WildthingsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Servy.Bear
 
