@@ -24,11 +24,11 @@ defmodule Servy.Handler do
     """
   end
 
-  defp route(%Conv{method: "GET", path: "/api/"} = conv) do
+  defp route(%Conv{method: "GET", path: "/api/bears"} = conv) do
     Servy.Api.BearController.index(conv)
   end
 
-  defp route(%Conv{method: "GET", path: "/"} = conv) do
+  defp route(%Conv{method: "GET", path: "/bears"} = conv) do
     BearController.index(conv)
   end
 

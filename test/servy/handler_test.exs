@@ -23,7 +23,7 @@ defmodule HandlerTest do
 
   test "handler a GET request for listing all bears and responde with HTML" do
     request = """
-    GET / HTTP/1.1
+    GET /bears HTTP/1.1
     Host: example.com
     User-Agent: ExampleBrowser/1.0
     Accept: */*
@@ -43,7 +43,7 @@ defmodule HandlerTest do
 
   test "handler a GET request for listing all bears and responde with JSON" do
     request = """
-    GET /api/ HTTP/1.1
+    GET /api/bears HTTP/1.1
     Host: example.com
     User-Agent: ExampleBrowser/1.0
     Accept: */*
