@@ -21,7 +21,7 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-  test "handler a GET request for listing all bears" do
+  test "handler a GET request for listing all bears and responde with HTML" do
     request = """
     GET / HTTP/1.1
     Host: example.com
@@ -36,6 +36,40 @@ defmodule HandlerTest do
     Content-Length: 331
 
     <ul>\n  \n    <li>Brutus - Grizzly</li>\n  \n    <li>Iceman - Polar</li>\n  \n    <li>Kenai - Grizzly</li>\n  \n    <li>Paddington - Brown</li>\n  \n    <li>Roscoe - Panda</li>\n  \n    <li>Rosie - Black</li>\n  \n    <li>Scarface - Grizzly</li>\n  \n    <li>Smokey - Black</li>\n  \n    <li>Snow - Polar</li>\n  \n    <li>Teddy - Brown</li>\n  \n</ul>\n
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+  end
+
+  test "handler a GET request for listing all bears and responde with JSON" do
+    request = """
+    GET /api/ HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    json_response = """
+    [{"type":"Brown","name":"Teddy","id":1,"hibernating":true},
+    {"type":"Black","name":"Smokey","id":2,"hibernating":false},
+    {"type":"Brown","name":"Paddington","id":3,"hibernating":false},
+    {"type":"Grizzly","name":"Scarface","id":4,"hibernating":true},
+    {"type":"Polar","name":"Snow","id":5,"hibernating":false},
+    {"type":"Grizzly","name":"Brutus","id":6,"hibernating":false},
+    {"type":"Black","name":"Rosie","id":7,"hibernating":true},
+    {"type":"Panda","name":"Roscoe","id":8,"hibernating":false},
+    {"type":"Polar","name":"Iceman","id":9,"hibernating":true},
+    {"type":"Grizzly","name":"Kenai","id":10,"hibernating":false}]
+    """
+    |> String.replace("\n", "")
+
+    expected_response = """
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+    Content-Length: 605
+
+    #{json_response}
     """
 
     assert Servy.Handler.handle(request) == expected_response

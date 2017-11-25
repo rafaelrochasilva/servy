@@ -14,14 +14,18 @@ defmodule Servy.Handler do
     |> format_response
   end
 
-  def format_response(%Conv{status: code, resp_body: resp_body}) do
+  def format_response(%Conv{status: code, resp_body: resp_body} = conv) do
     """
     HTTP/1.1 #{Conv.status_message(code)}
-    Content-Type: text/html
+    Content-Type: #{conv.resp_content_type}
     Content-Length: #{String.length(resp_body)}
 
     #{resp_body}
     """
+  end
+
+  defp route(%Conv{method: "GET", path: "/api/"} = conv) do
+    Servy.Api.BearController.index(conv)
   end
 
   defp route(%Conv{method: "GET", path: "/"} = conv) do
