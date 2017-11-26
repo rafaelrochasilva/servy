@@ -3,11 +3,11 @@ defmodule HandlerTest do
 
   test "handler a GET request for wildzoo" do
     request = """
-    GET /wildzoo HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /wildzoo HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     expected_response = """
@@ -23,11 +23,11 @@ defmodule HandlerTest do
 
   test "handler a GET request for listing all bears and responde with HTML" do
     request = """
-    GET /bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     expected_response = """
@@ -43,11 +43,11 @@ defmodule HandlerTest do
 
   test "handler a GET request for listing all bears and responde with JSON" do
     request = """
-    GET /api/bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /api/bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     json_response = """
@@ -77,11 +77,11 @@ defmodule HandlerTest do
 
   test "handler a unknow GET request" do
     request = """
-    GET /tigers HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /tigers HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     expected_response = """
@@ -97,14 +97,14 @@ defmodule HandlerTest do
 
   test "handler a POST request to create a new bear" do
     request = """
-    POST /bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-    Content-Type: application/x-www-form-urlencoded
-    Content-Length: 21
-
-    name=Baloo&type=Brown
+    POST /bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    Content-Type: application/x-www-form-urlencoded\r
+    Content-Length: 21\r
+    \r
+    name=Baloo&type=Brown\r
     """
 
     expected_response = """
