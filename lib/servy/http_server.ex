@@ -39,7 +39,8 @@ defmodule Servy.HttpServer do
     IO.puts "Connection accepted!\n"
 
     # Receives the request and sends a response over the client socket
-    serve(client_socket)
+    # Uses a process to avoid to lock the socket, while a client is connected.
+    spawn(fn -> serve(client_socket) end)
 
     # Loop back to wait and accept the next connection.
     accept_loop(listen_socket)
