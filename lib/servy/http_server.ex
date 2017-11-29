@@ -18,6 +18,7 @@ defmodule Servy.HttpServer do
     active: false - receive data when we're ready by calling :gen_tcp.recv/2
     reuseaddr: true - allows reusing the address if the listener crashes
   """
+
   @spec start(number) :: binary
   def start(port) when is_integer(port) and port > 1023 do
     {:ok, listen_socket} =
@@ -28,7 +29,7 @@ defmodule Servy.HttpServer do
     accept_loop(listen_socket)
   end
 
-  @spec accept_loop(number) :: number
+  @spec accept_loop(port) :: no_return
   defp accept_loop(listen_socket) do
     IO.puts "Waiting to accept a client connection...\n"
 
@@ -46,7 +47,7 @@ defmodule Servy.HttpServer do
     accept_loop(listen_socket)
   end
 
-  @spec serve(number) :: binary
+  @spec serve(number) :: no_return
   defp serve(client_socket) do
     client_socket
     |> read_request
@@ -54,7 +55,7 @@ defmodule Servy.HttpServer do
     |> write_response(client_socket)
   end
 
-  @spec read_request(number) :: binary
+  @spec read_request(port) :: any
   defp read_request(client_socket) do
     {:ok, request} = :gen_tcp.recv(client_socket, 0)
 
@@ -69,7 +70,7 @@ defmodule Servy.HttpServer do
     Servy.Handler.handle(request)
   end
 
-  @spec write_response(binary, number) :: atom
+  @spec write_response(binary, port) :: {:ok}
   defp write_response(response, client_socket) do
     :ok = :gen_tcp.send(client_socket, response)
 

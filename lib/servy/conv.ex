@@ -13,10 +13,12 @@ defmodule Servy.Conv do
     headers: %{}
   ]
 
+  @spec status_message(integer) :: binary
   def status_message(code) do
     "#{code} #{status_reason(code)}"
   end
 
+  @spec status_reason(integer) :: binary
   defp status_reason(code) do
     %{
       200 => "OK",

@@ -7,6 +7,18 @@ defmodule Servy.Handler do
   @pages_path Path.expand("../pages", __DIR__)
 
   @doc "Transforms the request into a response."
+
+  @type conv :: %{
+    __struct__: Servy.Conv,
+    method: binary,
+    path: binary,
+    resp_body: binary,
+    resp_content_type: binary,
+    status: integer,
+    params: %{},
+    headers: %{}
+  }
+
   def handle(request) do
     request
     |> Servy.Parser.parse
@@ -14,6 +26,7 @@ defmodule Servy.Handler do
     |> format_response
   end
 
+  @spec format_response(conv) :: binary
   def format_response(%Conv{status: code, resp_body: resp_body} = conv) do
     """
     HTTP/1.1 #{Conv.status_message(code)}
@@ -24,6 +37,7 @@ defmodule Servy.Handler do
     """
   end
 
+  @spec route(conv) :: conv
   defp route(%Conv{method: "GET", path: "/api/bears"} = conv) do
     Servy.Api.BearController.index(conv)
   end
