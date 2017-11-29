@@ -1,4 +1,4 @@
-defmodule Servy.Mixfile do
+ defmodule Servy.Mixfile do
   use Mix.Project
 
   def project do
@@ -22,7 +22,8 @@ defmodule Servy.Mixfile do
   defp deps do
     [
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
 end
