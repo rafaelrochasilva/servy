@@ -118,8 +118,34 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
+  test "handler a GET snapshot request" do
+    request = """
+    GET /snapshots HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    expected_response = """
+    HTTP/1.1 200 OK
+    Content-Type: text/html
+    Content-Length: 55
+
+    cam1-snapshot.jpg, cam2-snapshot.jpg, cam3-snapshot.jpg
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+  end
+
+
   test "formats the response" do
-    route_response =  %Servy.Conv{method: "GET", status: 200, path: "/wildzoo", resp_body: "Bears, Lions, Tigers\n"}
+    route_response =  %Servy.Conv{
+      method: "GET",
+      status: 200,
+      path: "/wildzoo",
+      resp_body: "Bears, Lions, Tigers\n"
+    }
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html

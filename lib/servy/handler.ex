@@ -3,6 +3,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.VideoCam
 
   @pages_path Path.expand("../pages", __DIR__)
 
@@ -38,6 +39,18 @@ defmodule Servy.Handler do
   end
 
   @spec route(conv) :: conv
+  defp route(%Conv{method: "GET", path: "/snapshots"} = conv) do
+    snap1 = VideoCam.get_snapshot("cam1")
+    snap2 = VideoCam.get_snapshot("cam2")
+    snap3 = VideoCam.get_snapshot("cam3")
+
+    list_snap =
+      [snap1, snap2, snap3]
+      |> Enum.reduce(fn(item, acc) -> acc <> ", " <> item end)
+
+    %{conv | status: 200, resp_body: list_snap}
+  end
+
   defp route(%Conv{method: "GET", path: "/api/bears"} = conv) do
     Servy.Api.BearController.index(conv)
   end
