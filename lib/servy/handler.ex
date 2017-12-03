@@ -1,13 +1,18 @@
 defmodule Servy.Handler do
-  @moduledoc "Handles HTTP requests."
+  @moduledoc """
+  Handles HTTP requests
+
+  When a new Http request is made to our server, it processes the request by
+  transforming the request, by parsing it. After parsing it, the request is
+  redirect for the proper route. For each route we process the request and
+  return its response.
+  """
 
   alias Servy.Conv
   alias Servy.BearController
   alias Servy.VideoCam
 
   @pages_path Path.expand("../pages", __DIR__)
-
-  @doc "Transforms the request into a response."
 
   @type conv :: %{
     __struct__: Servy.Conv,
@@ -20,6 +25,7 @@ defmodule Servy.Handler do
     headers: %{}
   }
 
+  @doc "Transforms the request into a response."
   def handle(request) do
     request
     |> Servy.Parser.parse
@@ -40,9 +46,14 @@ defmodule Servy.Handler do
 
   @spec route(conv) :: conv
   defp route(%Conv{method: "GET", path: "/snapshots"} = conv) do
-    snap1 = VideoCam.get_snapshot("cam1")
-    snap2 = VideoCam.get_snapshot("cam2")
-    snap3 = VideoCam.get_snapshot("cam3")
+    caller = self()
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam1")}) end)
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam2")}) end)
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam3")}) end)
+
+    snap1 = receive do {:result, filename} -> filename end
+    snap2 = receive do {:result, filename} -> filename end
+    snap3 = receive do {:result, filename} -> filename end
 
     list_snap =
       [snap1, snap2, snap3]
