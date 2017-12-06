@@ -46,8 +46,9 @@ defmodule Servy.Handler do
 
   @spec route(conv) :: conv
   defp route(%Conv{method: "GET", path: "/snapshots"} = conv) do
-    ["cam1", "cam2", "cam3"]
-    |> Enum.each(&Servy.Fetcher.async/1)
+    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam1") end)
+    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam2") end)
+    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam3") end)
 
     snap1 = Servy.Fetcher.get_result()
     snap2 = Servy.Fetcher.get_result()

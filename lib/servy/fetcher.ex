@@ -3,10 +3,10 @@ defmodule Servy.Fetcher do
   Fetcher is used to make async calls to VideoFetcher 
   """
 
-  def async(camera) do
+  def async(fun) do
     caller = self()
 
-    spawn(fn -> send(caller, {:result, Servy.VideoCam.get_snapshot(camera)}) end)
+    spawn(fn -> send(caller, {:result, fun.()}) end)
   end
 
   def get_result do
