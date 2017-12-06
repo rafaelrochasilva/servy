@@ -45,17 +45,19 @@ defmodule Servy.Handler do
   end
 
   @spec route(conv) :: conv
-  defp route(%Conv{method: "GET", path: "/snapshots"} = conv) do
-    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam1") end)
-    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam2") end)
-    Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam3") end)
+  defp route(%Conv{method: "GET", path: "/sensors"} = conv) do
+    pid1 = Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam1") end)
+    pid2 = Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam2") end)
+    pid3 = Servy.Fetcher.async(fn -> VideoCam.get_snapshot("cam3") end)
+    pid4 = Servy.Fetcher.async(fn -> Servy.Tracker.get_location_str("bigfoot") end)
 
-    snap1 = Servy.Fetcher.get_result()
-    snap2 = Servy.Fetcher.get_result()
-    snap3 = Servy.Fetcher.get_result()
+    snap1 = Servy.Fetcher.get_result(pid1)
+    snap2 = Servy.Fetcher.get_result(pid2)
+    snap3 = Servy.Fetcher.get_result(pid3)
+    location = Servy.Fetcher.get_result(pid4)
 
     list_snap =
-      [snap1, snap2, snap3]
+      [snap1, snap2, snap3, location]
       |> Enum.reduce(fn(item, acc) -> acc <> ", " <> item end)
 
     %{conv | status: 200, resp_body: list_snap}

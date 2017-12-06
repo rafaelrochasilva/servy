@@ -118,9 +118,9 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-  test "handler a GET snapshot request" do
+  test "handler a GET request for sensors" do
     request = """
-    GET /snapshots HTTP/1.1\r
+    GET /sensors HTTP/1.1\r
     Host: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
@@ -130,9 +130,9 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 55
+    Content-Length: 87
 
-    cam1-snapshot.jpg, cam2-snapshot.jpg, cam3-snapshot.jpg
+    cam1-snapshot.jpg, cam2-snapshot.jpg, cam3-snapshot.jpg, lat: 29.0469 N, lng: 98.8667 W
     """
 
     assert Servy.Handler.handle(request) == expected_response

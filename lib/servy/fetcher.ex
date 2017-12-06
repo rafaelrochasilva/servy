@@ -6,10 +6,11 @@ defmodule Servy.Fetcher do
   def async(fun) do
     caller = self()
 
-    spawn(fn -> send(caller, {:result, fun.()}) end)
+    # self() will be the same result as the pid after calling spawn
+    spawn(fn -> send(caller, {self(), :result, fun.()}) end)
   end
 
-  def get_result do
-    receive do {:result, filename} -> filename end
+  def get_result(pid) do
+    receive do {^pid, :result, filename} -> filename end
   end
 end

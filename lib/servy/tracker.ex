@@ -19,4 +19,10 @@ defmodule Servy.Tracker do
 
     Map.get(locations, wildthing)
   end
+
+  def get_location_str(wildthing) do
+    %{lat: lat, lng: lng} = get_location(wildthing)
+
+    "lat: #{lat}, lng: #{lng}"
+  end
 end
