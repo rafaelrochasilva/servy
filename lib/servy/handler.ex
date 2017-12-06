@@ -46,14 +46,12 @@ defmodule Servy.Handler do
 
   @spec route(conv) :: conv
   defp route(%Conv{method: "GET", path: "/snapshots"} = conv) do
-    caller = self()
-    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam1")}) end)
-    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam2")}) end)
-    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam3")}) end)
+    ["cam1", "cam2", "cam3"]
+    |> Enum.each(&Servy.Fetcher.async/1)
 
-    snap1 = receive do {:result, filename} -> filename end
-    snap2 = receive do {:result, filename} -> filename end
-    snap3 = receive do {:result, filename} -> filename end
+    snap1 = Servy.Fetcher.get_result()
+    snap2 = Servy.Fetcher.get_result()
+    snap3 = Servy.Fetcher.get_result()
 
     list_snap =
       [snap1, snap2, snap3]
