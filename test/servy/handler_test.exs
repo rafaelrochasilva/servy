@@ -138,7 +138,6 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
-
   test "formats the response" do
     route_response =  %Servy.Conv{
       method: "GET",
