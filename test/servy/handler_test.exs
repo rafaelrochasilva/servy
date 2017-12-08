@@ -132,7 +132,7 @@ defmodule HandlerTest do
     Content-Type: text/html
     Content-Length: 87
 
-    cam1-snapshot.jpg, cam2-snapshot.jpg, cam3-snapshot.jpg, lat: 29.0469 N, lng: 98.8667 W
+    lat: 29.0469 N, lng: 98.8667 W, cam1-snapshot.jpg, cam2-snapshot.jpg, cam3-snapshot.jpg
     """
 
     assert Servy.Handler.handle(request) == expected_response

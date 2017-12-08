@@ -46,17 +46,17 @@ defmodule Servy.Handler do
 
   @spec route(conv) :: conv
   defp route(%Conv{method: "GET", path: "/sensors"} = conv) do
-    pid = Servy.Fetcher.async(fn -> Servy.Tracker.get_location_str("bigfoot") end)
+    pid = Task.async(fn -> Servy.Tracker.get_location_str("bigfoot") end)
 
     snapshots =
       ["cam1", "cam2", "cam3"]
-      |> Enum.map(&Servy.Fetcher.async(fn -> VideoCam.get_snapshot(&1) end))
-      |> Enum.map(&Servy.Fetcher.get_result(&1))
+      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
+      |> Enum.map(&Task.await(&1))
 
-    location = Servy.Fetcher.get_result(pid)
+    location = Task.await(pid)
 
     sensors =
-      snapshots ++ [location]
+      [location | snapshots]
       |> Enum.reduce(fn(item, acc) -> acc <> ", " <> item end)
 
     %{conv | status: 200, resp_body: sensors}
