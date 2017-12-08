@@ -138,6 +138,47 @@ defmodule HandlerTest do
     assert Servy.Handler.handle(request) == expected_response
   end
 
+  test "handles a GET request for pledges" do
+    request = """
+    GET /pledges HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    expected_response = """
+    HTTP/1.1 200 OK
+    Content-Type: text/html
+    Content-Length: 87
+
+    Rafael pledged 100!
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+
+  end
+
+  test "handles a POST request for pledges" do
+    request = """
+    GET /pledges HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    expected_response = """
+    HTTP/1.1 201 OK
+    Content-Type: text/html
+    Content-Length: 87
+
+    Rafael pledged 100!
+    """
+
+    assert Servy.Handler.handle(request) == expected_response
+  end
+
   test "formats the response" do
     route_response =  %Servy.Conv{
       method: "GET",
