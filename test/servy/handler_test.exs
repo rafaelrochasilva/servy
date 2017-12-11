@@ -139,6 +139,12 @@ defmodule HandlerTest do
   end
 
   test "handles a GET request for pledges" do
+    pid = Servy.PledgeServer.start()
+    Servy.PledgeServer.create_pledge("larry", 10)
+    Servy.PledgeServer.create_pledge("bruce", 20)
+    Servy.PledgeServer.create_pledge("anna", 50)
+    Servy.PledgeServer.create_pledge("joe", 30)
+
     request = """
     GET /pledges HTTP/1.1\r
     Host: example.com\r
@@ -150,37 +156,40 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 87
+    Content-Length: 25
 
-    Rafael pledged 100!
+    joe 30, anna 50, bruce 20
     """
 
     assert Servy.Handler.handle(request) == expected_response
-
+    Process.exit(pid, :kill)
   end
 
   test "handles a POST request for pledges" do
+    pid = Servy.PledgeServer.start()
     request = """
-    GET /pledges HTTP/1.1\r
+    POST /pledges HTTP/1.1\r
     Host: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
     \r
+    name=Baloo&amount=100\r
     """
 
     expected_response = """
-    HTTP/1.1 201 OK
+    HTTP/1.1 201 Created
     Content-Type: text/html
-    Content-Length: 87
+    Content-Length: 18
 
-    Rafael pledged 100!
+    Baloo pledged 100!
     """
 
     assert Servy.Handler.handle(request) == expected_response
+    Process.exit(pid, :kill)
   end
 
   test "formats the response" do
-    route_response =  %Servy.Conv{
+    route_response = %Servy.Conv{
       method: "GET",
       status: 200,
       path: "/wildzoo",

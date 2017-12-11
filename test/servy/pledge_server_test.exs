@@ -8,6 +8,13 @@ defmodule Servy.PledgeServerTest do
     Process.exit(pid, :kill)
   end
 
+  test "returns an empty list when there is no pledges" do
+    pid = Servy.PledgeServer.start()
+
+    assert Servy.PledgeServer.recent_pledges() == []
+    Process.exit(pid, :kill)
+  end
+
   test "returns the last 3 recent pledges" do
     pid = Servy.PledgeServer.start()
     Servy.PledgeServer.create_pledge("larry", 10)
