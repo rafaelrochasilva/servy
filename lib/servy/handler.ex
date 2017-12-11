@@ -10,6 +10,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.PledgeController
   alias Servy.VideoCam
 
   @pages_path Path.expand("../pages", __DIR__)
@@ -60,6 +61,14 @@ defmodule Servy.Handler do
       |> Enum.reduce(fn(item, acc) -> acc <> ", " <> item end)
 
     %{conv | status: 200, resp_body: sensors}
+  end
+
+  defp route(%Conv{method: "GET", path: "/pledges"} = conv) do
+    PledgeController.index(conv)
+  end
+
+  defp route(%Conv{method: "POST", path: "/pledges"} = conv) do
+    PledgeController.create(conv, conv.params)
   end
 
   defp route(%Conv{method: "GET", path: "/api/bears"} = conv) do
