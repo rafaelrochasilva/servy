@@ -1,65 +1,78 @@
 defmodule Servy.PledgeServer do
+  use GenServer
   @moduledoc """
   Handles the amout of Pledges for given names
   """
 
-  @type pledge :: {binary, number}
-  @process_name :pledge_server
+  defmodule State do
+    defstruct total: 0, pledges: []
+  end
 
-  def start do
-    pid = spawn(__MODULE__, :listen_loop, [[], 0])
-    Process.register(pid, :pledge_server)
-    pid
+  @type pledge :: {binary, number}
+  @name :pledge_server
+
+  # Client
+
+  def start_link do
+    GenServer.start_link(__MODULE__, :ok, name: @name)
   end
 
   @spec create_pledge(binary, number) :: [pledge]
   def create_pledge(name, amount) do
-    send @process_name, {self(), :create_pledge, name, amount}
-
-    receive do {:response, status} -> status end
+    GenServer.call(@name, {:create_pledge, name, amount})
   end
 
   @spec recent_pledges() :: binary
   def recent_pledges do
-    send @process_name, {self(), :recent_pledges}
-
-    receive do {:response, pledges} -> pledges end
+    GenServer.call(@name, :recent_pledges)
   end
 
   @spec total_pledged() :: number
   def total_pledged do
-    send @process_name, {self(), :total_pledged}
-
-    receive do {:total_pledged, total} -> total end
+    GenServer.call(@name, :total_pledged)
   end
 
-  def listen_loop(state, total) do
-    receive do
-      {sender, :create_pledge, name, amount} ->
-        {:ok, id} = send_pledge_to_service(name, amount)
-        new_state =
-          [{name, amount} | state]
-          |> Enum.take(3)
-        IO.puts "#{total} + #{amount}"
-        new_total = total + amount
-        send sender, {:response, id}
-        listen_loop(new_state, new_total)
+  # Server
 
-      {sender, :recent_pledges} ->
-        send sender, {:response, state}
-        listen_loop(state, total)
-
-      {sender, :total_pledged} ->
-        send sender, {:total_pledged, total}
-        listen_loop(state, total)
-
-      unexpected ->
-        IO.puts "Unexpected message: #{inspect unexpected}"
-        listen_loop(state, total)
-    end
+  def init(:ok) do
+    {pledges, total} = fetch_recent_state_from_services()
+    state = %State{pledges: pledges, total: total}
+    {:ok, state}
   end
 
+  def handle_call({:create_pledge, name, amount}, _from, state) do
+    {:ok, id} = send_pledge_to_service(name, amount)
+    pledges =
+      [{name, amount} | state.pledges]
+      |> Enum.take(3)
+
+    new_total = state.total + amount
+
+    new_state = %State{pledges: pledges, total: new_total}
+
+    {:reply, id, new_state}
+  end
+
+  def handle_call(:recent_pledges, _from, state) do
+    {:reply, state.pledges, state}
+  end
+
+  def handle_call(:total_pledged, _from, state) do
+    {:reply, state.total, state}
+  end
+
+  def handle_info(message, state) do
+    IO.puts "Unexpected message: #{inspect message}"
+    {:noreply, state}
+  end
+
+  # Simulates an add to a externall service
   defp send_pledge_to_service(_name, _amount) do
     {:ok, "pledge-#{:rand.uniform(1000)}"}
+  end
+
+  # Simulates a fetch from an external service
+  defp fetch_recent_state_from_services do
+    {[{"wilma", 35}, {"mike", 10}], 45}
   end
 end

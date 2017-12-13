@@ -1,22 +1,20 @@
 defmodule Servy.PledgeServerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
-  test "creates a pledge for a given name and amount" do
-    pid = Servy.PledgeServer.start()
-
-    assert Regex.match?(~r/pledge/, Servy.PledgeServer.create_pledge("larry", 10))
-    Process.exit(pid, :kill)
+  setup do
+    {:ok, pledge} = Servy.PledgeServer.start_link()
+    {:ok, process: pledge}
   end
 
-  test "returns an empty list when there is no pledges" do
-    pid = Servy.PledgeServer.start()
+  test "creates a pledge for a given name and amount" do
+    assert Regex.match?(~r/pledge/, Servy.PledgeServer.create_pledge("larry", 10))
+  end
 
-    assert Servy.PledgeServer.recent_pledges() == []
-    Process.exit(pid, :kill)
+  test "returns a cached list from a external service when there is no pledges" do
+    assert Servy.PledgeServer.recent_pledges() == [{"wilma", 35}, {"mike", 10}]
   end
 
   test "returns the last 3 recent pledges" do
-    pid = Servy.PledgeServer.start()
     Servy.PledgeServer.create_pledge("larry", 10)
     Servy.PledgeServer.create_pledge("bruce", 20)
     Servy.PledgeServer.create_pledge("anna", 50)
@@ -25,17 +23,14 @@ defmodule Servy.PledgeServerTest do
     expected_response = [{"joe", 30}, {"anna", 50}, {"bruce", 20}]
 
     assert Servy.PledgeServer.recent_pledges() == expected_response
-    Process.exit(pid, :kill)
   end
 
   test "returns the total of pledges" do
-    pid = Servy.PledgeServer.start()
     Servy.PledgeServer.create_pledge("larry", 10)
     Servy.PledgeServer.create_pledge("bruce", 20)
     Servy.PledgeServer.create_pledge("anna", 50)
     Servy.PledgeServer.create_pledge("joe", 30)
 
-    assert Servy.PledgeServer.total_pledged() == 110
-    Process.exit(pid, :kill)
+    assert Servy.PledgeServer.total_pledged() == 155
   end
 end

@@ -139,7 +139,7 @@ defmodule HandlerTest do
   end
 
   test "handles a GET request for pledges" do
-    pid = Servy.PledgeServer.start()
+    {:ok, pid} = Servy.PledgeServer.start_link()
     Servy.PledgeServer.create_pledge("larry", 10)
     Servy.PledgeServer.create_pledge("bruce", 20)
     Servy.PledgeServer.create_pledge("anna", 50)
@@ -166,7 +166,7 @@ defmodule HandlerTest do
   end
 
   test "handles a POST request for pledges" do
-    pid = Servy.PledgeServer.start()
+    {:ok, pid} = Servy.PledgeServer.start_link()
     request = """
     POST /pledges HTTP/1.1\r
     Host: example.com\r
