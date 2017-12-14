@@ -11,6 +11,6 @@ defmodule Servy.VideoCam do
     #Simulates a GET request to an external API
     :timer.sleep(1000)
 
-    "#{camera}-snapshot.jpg"
+    "#{camera}-snapshot-#{:rand.uniform(1000)}.jpg"
   end
 end
