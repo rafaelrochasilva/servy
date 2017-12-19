@@ -8,6 +8,9 @@ fault tolerance from scratch.
 - Install Elixir:
 `brew update && brew install elixir`
 
+- Clone the project:
+`git clone git@github.com:rafaelrochasilva/servy.git`
+
 - Install the dependencies:
 `mix deps.get`
 
@@ -18,5 +21,5 @@ fault tolerance from scratch.
 Credo is a static code analysis tool for the Elixir language with a focus on 
 teaching and code consistency
 
-Run before pushing code
+- Run before pushing code
 
